@@ -55,7 +55,12 @@ ifneq ($(BUILD_IN_CONTAINER),1)
 	CGO_ENABLED=0 GO111MODULE=on GOFLAGS='$(GOFLAGS)' GOOS=linux go build -installsuffix cgo -ldflags "-w -X main.version=${VERSION} -X main.gitCommit=${GIT_COMMIT}" -o nginx-ingress github.com/nginxinc/kubernetes-ingress/cmd/nginx-ingress
 endif
 
-container: test verify-codegen verify-crds binary certificate-and-key
+install-plus:
+ifneq (,$(findstring Plus,$(DOCKERFILE)))
+DOCKER_BUILD_OPTIONS += --secret id=nginx-repo.crt,src=nginx-repo.crt --secret id=nginx-repo.key,src=nginx-repo.key
+endif
+
+container: test verify-codegen verify-crds binary certificate-and-key install-plus
 ifeq ($(BUILD_IN_CONTAINER),1)
 	docker build $(DOCKER_BUILD_OPTIONS) --build-arg IC_VERSION=$(VERSION)-$(GIT_COMMIT) --build-arg GIT_COMMIT=$(GIT_COMMIT) --build-arg VERSION=$(VERSION) --build-arg GOLANG_CONTAINER=$(GOLANG_CONTAINER) --target container -f $(DOCKERFILEPATH)/$(DOCKERFILE) -t $(PREFIX):$(TAG) .
 else

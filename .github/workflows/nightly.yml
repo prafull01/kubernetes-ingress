@@ -72,54 +72,73 @@ jobs:
             target: local
             image: nginx-ingress
             type: oss
+            secrets: ''
           - os: ubuntu-18.04
             file: build/DockerfileForAlpine
             context: '.'
             target: local
             image: nginx-ingress-alpine
             type: oss
+            secrets: ''
           - os: ubuntu-18.04
             file: build/DockerfileForPlus
             context: '.'
             target: local
             image: nginx-plus-ingress
             type: plus
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/DockerfileWithOpentracing
             context: '.'
             target: local
             image: nginx-ingress-opentracing
             type: oss
+            secrets: ''
           - os: ubuntu-18.04
             file: build/DockerfileWithOpentracingForPlus
             context: '.'
             target: local
             image: nginx-plus-ingress-opentracing
             type: plus
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/openshift/Dockerfile
             context: '.'
             target: local
             image: nginx-ingress-openshift
             type: oss
+            secrets: ''
           - os: ubuntu-18.04
             file: build/openshift/DockerfileForPlus
             context: '.'
             target: local
             image: nginx-plus-ingress-openshift
             type: plus
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/appprotect/DockerfileWithAppProtectForPlus
             context: '.'
             target: local
             image: nginx-plus-ingress-ap
             type: plus-ap
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/appprotect/DockerfileWithAppProtectForPlusForOpenShift
             context: '.'
             target: local
             image: nginx-plus-ingress-ap-openshift
             type: plus-ap-openshift
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -166,6 +185,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           target: ${{ matrix.target }}
           tags: ${{ matrix.image }}:${{ github.sha }}
+          secrets: ${{ matrix.secrets }}
 
   smoke-tests:
     name: Smoke Tests
@@ -181,6 +201,7 @@ jobs:
             marker: ''
             type: oss
             k8s: 1.19.1
+            secrets: ''
           - os: ubuntu-18.04
             file: build/Dockerfile
             image: nginx-ingress
@@ -188,6 +209,7 @@ jobs:
             marker: ''
             type: oss
             k8s: 1.18.8
+            secrets: ''
           - os: ubuntu-18.04
             file: build/Dockerfile
             image: nginx-ingress
@@ -195,6 +217,7 @@ jobs:
             marker: ''
             type: oss
             k8s: 1.17.11
+            secrets: ''
           - os: ubuntu-18.04
             file: build/Dockerfile
             image: nginx-ingress
@@ -202,6 +225,7 @@ jobs:
             marker: ''
             type: oss
             k8s: 1.16.15
+            secrets: ''
           - os: ubuntu-18.04
             file: build/Dockerfile
             image: nginx-ingress
@@ -209,6 +233,7 @@ jobs:
             marker: ''
             type: oss
             k8s: 1.15.12
+            secrets: ''
           - os: ubuntu-18.04
             file: build/DockerfileForPlus
             image: nginx-plus-ingress
@@ -216,6 +241,9 @@ jobs:
             marker: ''
             type: plus
             k8s: 1.19.1
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/DockerfileForPlus
             image: nginx-plus-ingress
@@ -223,6 +251,9 @@ jobs:
             marker: ''
             type: plus
             k8s: 1.18.8
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/DockerfileForPlus
             image: nginx-plus-ingress
@@ -230,6 +261,9 @@ jobs:
             marker: ''
             type: plus
             k8s: 1.17.11
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/DockerfileForPlus
             image: nginx-plus-ingress
@@ -237,6 +271,9 @@ jobs:
             marker: ''
             type: plus
             k8s: 1.16.15
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/DockerfileForPlus
             image: nginx-plus-ingress
@@ -244,6 +281,7 @@ jobs:
             marker: ''
             type: plus
             k8s: 1.15.12
+            secrets: ''
           - os: ubuntu-18.04
             file: build/appprotect/DockerfileWithAppProtectForPlus
             image: nginx-plus-ingress
@@ -251,6 +289,9 @@ jobs:
             marker: '-m appprotect'
             type: plus-ap
             k8s: 1.19.1
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/appprotect/DockerfileWithAppProtectForPlus
             image: nginx-plus-ingress
@@ -258,6 +299,9 @@ jobs:
             marker: '-m appprotect'
             type: plus-ap
             k8s: 1.18.8
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/appprotect/DockerfileWithAppProtectForPlus
             image: nginx-plus-ingress
@@ -265,6 +309,9 @@ jobs:
             marker: '-m appprotect'
             type: plus-ap
             k8s: 1.17.11
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/appprotect/DockerfileWithAppProtectForPlus
             image: nginx-plus-ingress
@@ -272,6 +319,9 @@ jobs:
             marker: '-m appprotect'
             type: plus-ap
             k8s: 1.16.15
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
           - os: ubuntu-18.04
             file: build/appprotect/DockerfileWithAppProtectForPlus
             image: nginx-plus-ingress
@@ -279,6 +329,9 @@ jobs:
             marker: '-m appprotect'
             type: plus-ap
             k8s: 1.15.12
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -324,6 +377,7 @@ jobs:
           target: local
           tags: ${{ matrix.image }}:${{ matrix.tag }}
           load: true
+          secrets: ${{ matrix.secrets }}
       - name: Build Test-Runner Container
         uses: docker/build-push-action@v2
         with:
@@ -395,12 +449,16 @@ jobs:
             image: nginx-ingress
             tag: ${{ github.sha }}
             type: oss
+            secrets: ''
           - os: ubuntu-18.04
             path: build
             file: DockerfileForPlus
             image: nginx-plus-ingress
             tag: ${{ github.sha }}
             type: plus
+            secrets: |
+              nginx-repo.crt=nginx-repo.crt
+              nginx-repo.key=nginx-repo.key
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -438,6 +496,7 @@ jobs:
           target: local
           tags: ${{ matrix.image }}:${{ matrix.tag }}
           load: true
+          secrets: ${{ matrix.secrets }}
       - name: Deploy Kubernetes
         id: k8s
         run: |
