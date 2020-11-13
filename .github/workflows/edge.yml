@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - use-docker-buildkit-secret
     paths-ignore:
       - 'docs/**'
       - 'docs-web/**'
